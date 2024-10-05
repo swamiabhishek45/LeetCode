@@ -1,58 +1,25 @@
 class Solution {
-private: 
-    bool checkEqual(int a[26], int b[26])
-    {
-
-        for(int i = 0; i<26; i++){
-
-            if(a[i] != b[i])
-              return 0;
-        }
-        return 1;
-
-    }
-    
 public:
     bool checkInclusion(string s1, string s2) {
-        int count1[26] = {0};
+         if (s1.size() > s2.size()) return false;
 
-        // char count store
-        for(int i = 0; i<s1.length(); i++){
-            int index = s1[i] - 'a';
-            count1[index]++;
-        }
+    vector<int> s1Freq(26, 0), s2Freq(26, 0);
 
-        // traverse s2 string in window of size s1 length and compare
-        int i = 0;
-        int windowSize = s1.length();
-        int count2[26] = {0};
+    // Populate frequency for the first window
+    for (int i = 0; i < s1.size(); i++) {
+        s1Freq[s1[i] - 'a']++;
+        s2Freq[s2[i] - 'a']++;
+    }
 
-        // running for first window
-        while(i < windowSize && i<s2.length()){
-            int index = s2[i] - 'a';
-            count2[index]++;
-            i++;
-        }
+    // Sliding window starts from the next index
+    for (int i = s1.size(); i < s2.size(); i++) {
+        if (s1Freq == s2Freq) return true;
 
-        if( checkEqual(count1, count2) )
-            return 1;
+        // Slide the window: remove the previous character and add the new one
+        s2Freq[s2[i] - 'a']++;
+        s2Freq[s2[i - s1.size()] - 'a']--;
+    }
 
-        // process window to next
-        while(i < s2.length()){
-            char newChar = s2[i];
-            int index = newChar - 'a';
-            count2[index]++;
-
-            char oldChar = s2[i - windowSize];
-            index = oldChar - 'a';
-            count2[index]--;
-
-            i++;
-
-            if( checkEqual(count1, count2) )
-            return 1;
-           
-        }
-        return 0;
+    return s1Freq == s2Freq;
     }
 };
