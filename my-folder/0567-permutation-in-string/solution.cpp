@@ -1,25 +1,28 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-         if (s1.size() > s2.size()) return false;
 
-    vector<int> s1Freq(26, 0), s2Freq(26, 0);
+        if (s1.length() > s2.length()) return false;
 
-    // Populate frequency for the first window
-    for (int i = 0; i < s1.size(); i++) {
-        s1Freq[s1[i] - 'a']++;
-        s2Freq[s2[i] - 'a']++;
-    }
+        vector<int> freq1(26, 0), freq2(26, 0);
 
-    // Sliding window starts from the next index
-    for (int i = s1.size(); i < s2.size(); i++) {
-        if (s1Freq == s2Freq) return true;
+        for(char c : s1){
+            freq1[c - 'a']++;
+        }
 
-        // Slide the window: remove the previous character and add the new one
-        s2Freq[s2[i] - 'a']++;
-        s2Freq[s2[i - s1.size()] - 'a']--;
-    }
+        for(int i = 0; i<s2.size(); i++){
+            freq2[s2[i]-'a']++;
 
-    return s1Freq == s2Freq;
+            if(i >= s1.size()){
+                freq2[s2[i - s1.size()] - 'a']--;
+            }
+
+            if(freq1 == freq2){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 };
